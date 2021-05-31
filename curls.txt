@@ -1,0 +1,13 @@
+curl -d '{"email":"value1", "first":"value2", "last":"value2"}' -H "Content-Type: application/json" -X POST http://localhost:5000/user
+
+curl -d '{"sender":1, "reciever":2, "body":"hi hi"}' -H "Content-Type: application/json" -X POST http://localhost:5000/user
+
+curl -d '{"participants":[1,2]}' -H "Content-Type: application/json" -X GET http://localhost:5000/conversation
+
+curl -d '{"sender":1, "reciever":2, "body":"hi josh"}' -H "Content-Type: application/json" -X POST http://localhost:5000/user
+
+curl -d '{"sender":2, "reciever":1, "body":"hi tyler"}' -H "Content-Type: application/json" -X POST http://localhost:5000/user
+
+curl -d '{"sender":1, "reciever":2, "body":"how are you?"}' -H "Content-Type: application/json" -X POST http://localhost:5000/user
+
+curl -d '{"sender":2, "reciever":1, "body":"very good thanks!"}' -H "Content-Type: application/json" -X POST http://localhost:5000/user
