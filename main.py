@@ -19,6 +19,7 @@ Migrate(app, db)
 
 class User(db.Model):
     __tablename__ = 'users'
+    __table_args__ = {"schema": "app"}
     id = db.Column(db.Integer, primary_key=True)
     first = db.Column(db.String(50), unique=True, nullable=False)
     last = db.Column(db.String(50), unique=True, nullable=False)
@@ -33,6 +34,7 @@ class User(db.Model):
 
 class Chat(db.Model):
     __tablename__ = 'chat'
+    __table_args__ = {"schema": "app"}
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.TEXT, unique=True, nullable=False)
     sender = db.Column(db.Integer, unique=True, nullable=False)
@@ -88,10 +90,10 @@ def conversation():
         participants = request.json.get("participants")
         result = db.engine.execute(f"""
                select u.id, u.first, u.last, ur.id, ur.first, ur.last, body, c.datecreated
-                from users u
-                join chat c 
+                from app.users u
+                join app.chat c 
                 on u.id = c.sender
-                join users ur
+                join app.users ur
                 on ur.id = reciever
                 where 
                 (sender = {participants[0]} and reciever = {participants[1]})
