@@ -3,16 +3,17 @@ from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from sqlalchemy import DateTime
+from flask_migrate import Migrate
 from flask import jsonify
 import os
 import datetime
-from flask_migrate import Migrate
-
 
 app = Flask(__name__)
 ### if runninning locally get postgres uri from env variables
 ### uri = 'postgresql://user:password@host/db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['POSTGRES_URL']
+db_conn = f"""postgresql://{os.environ['DB_USER']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}/"""
+print(f"THIS IS {db_conn=}")
+app.config['SQLALCHEMY_DATABASE_URI'] = db_conn
 db = SQLAlchemy(app)
 Migrate(app, db)
 
@@ -29,7 +30,6 @@ class User(db.Model):
         self.first = first
         self.last = last
         self.email = email
-
 
 
 class Chat(db.Model):
@@ -105,7 +105,7 @@ def conversation():
 
         messages = [ ConversationRow(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]) for row in result]
         
-        return jsonify([m.to_dict() for m in messages]) ,200
+        return jsonify([m.to_dict() for m in messages]), 200
 
 @app.route('/user', methods=['POST', 'GET'])
 def user():
@@ -118,9 +118,4 @@ def user():
         db.session.add(user)
         db.session.commit()
         return jsonify({200: 'OK'}),200
-
-
-
-
-
 
