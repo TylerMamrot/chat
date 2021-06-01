@@ -1,0 +1,14 @@
+
+version: '3.6'
+services: 
+    web:
+        build: .
+        command: gunicorn --bind 0.0.0.0:5000 main:app
+        expose: 
+            - 5000
+    nginx:
+        build: ./nginx
+        ports:
+            - 1337:80
+        depends_on:
+            - web
